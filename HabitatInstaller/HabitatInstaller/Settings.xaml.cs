@@ -22,8 +22,8 @@ namespace HabitatInstaller
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string errorMessageTempDir, errorMessageValidField;
-            var isValidTempDir = Validation.DirectoryExistsWithTrailingSlash(tempDirectory.Text, out errorMessageTempDir);
             var isValidField = Validation.IsValidFieldInput(habitatUrl.Text, out errorMessageValidField);
+            var isValidTempDir = Validation.DirectoryExists(tempDirectory.Text, out errorMessageTempDir);
 
             if (!isValidField)
             {

@@ -9,14 +9,6 @@
         Title="Habitat installer" Height="500" Width="525" Background="#2e384e">
     <Grid>
         <Image Source="habitat.png" Stretch="None" VerticalAlignment="Top" />
-        <Button Content="Settings"
-		HorizontalAlignment="Left"
-		Margin="10,10,0,0"
-		VerticalAlignment="Top"
-		Width="75"
-        ToolTip="Edit settings"
-		Click="SettingButton_Click"/>
-
         <Label Content="Install Habitat solution to:"
                Name="projectPathLabel"
                Padding="0" 
@@ -27,45 +19,59 @@
         <TextBox Height="23"
                  HorizontalAlignment="Left"
                  Margin="24,120,0,0" Name="projectPath" VerticalAlignment="Top" Width="300" />
-        <Label Content="Current website path:"
+        <Label Content="Habitat variables:"
+               FontWeight="ExtraBold"
+               Name="variablesLabel"
+               Padding="0" 
+               VerticalAlignment="Top"
+               Margin="24,162,194.4,0"
+               Foreground="LightGray" 
+                />
+        <Label Content="gulp-config.js - instanceRoot:"
                Name="websitePathLabel"
                Padding="0" 
                VerticalAlignment="Top"
-               Margin="24,150,194.4,0"
+               Margin="24,183,194.4,0"
                Foreground="LightGray" 
                 />
         <TextBox Height="23"
                  HorizontalAlignment="Left"
-                 Margin="24,170,0,0" Name="websitePath" VerticalAlignment="Top" Width="300" />
-        <Label Content="Current website Url:"
+                 Margin="24,202,0,0" Name="instanceRoot" VerticalAlignment="Top" Width="300" />
+        <Label Content="publishsettings.targets - publishUrl:"
                Name="websiteUrlLabel"
                Padding="0" 
                VerticalAlignment="Top"
-               Margin="24,200,194.4,0"
+               Margin="24,233,194.4,0"
                Foreground="LightGray" 
                 />
         <TextBox Height="23"
                  HorizontalAlignment="Left"
-                 Margin="24,220,0,0" Name="websiteUrl" VerticalAlignment="Top" Width="300" />
+                 Margin="24,253,0,0" Name="publishUrl" VerticalAlignment="Top" Width="300" />
 
-        <Label Content="Current hostname:"
+        <Label Content="z.Habitat.DevSettings.config - rootHostName:"
             x:Name="hostnameLabel"
             Padding="0" 
             VerticalAlignment="Top"
-            Margin="24,250,194.4,0"
+            Margin="24,283,194.4,0"
             Foreground="LightGray" 
                 />
         <TextBox Height="23"
             HorizontalAlignment="Left"
-            Margin="24,270,0,0" x:Name="hostname" VerticalAlignment="Top" Width="300" />
+            Margin="24,303,0,0" x:Name="hostname" VerticalAlignment="Top" Width="300" />
         <Button Content="Install"
 		HorizontalAlignment="Center"
-		Margin="164,352,141.4,0"
+		Margin="24,352,194.4,0"
 		VerticalAlignment="Top"
-		Width="213"
+		Width="300"
         Height="75"
-        ToolTip="Install Habitat"
 		Click="InstallButton_Click"/>
+        <Button Content="Settings"
+		HorizontalAlignment="Left"
+		Margin="395,352,0,0"
+		VerticalAlignment="Top"
+		Width="92"
+		Click="SettingButton_Click" Height="75"/>
+
 
     </Grid>
 </Window>

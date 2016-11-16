@@ -5,16 +5,15 @@ namespace HabitatInstaller.Class
 {
     public static class Validation
     {
-        private const string NO_TRAILINGSLASH = @"invalid - field must end with \";
+        private const string NO_TRAILING_CHAR = "invalid - field must end with ";
         private const string PATH_DOES_NOT_EXIST = "does not exist";
         private const string STRING_EMPTY = "Fields cannot be empty";
-        private const string NOT_VALID_URL = "please insert a valid Url";
 
-        public static bool DirectoryExistsWithTrailingSlash(string path, out string errorReason)
+        public static bool DirectoryExists(string path, out string errorReason)
         {
-            if (!path.EndsWith(@"\"))
+            if (string.IsNullOrEmpty(path))
             {
-                errorReason = string.Format("{0} {1} {2}", "Path", path, NO_TRAILINGSLASH);
+                errorReason = string.Format("{0}", STRING_EMPTY);
                 return false;
             }
             else if (!Directory.Exists(path))
@@ -42,5 +41,25 @@ namespace HabitatInstaller.Class
                 return true;
             }
         }
+
+        public static bool IsValidFieldInputWithTrailingChar(string inputText, string character, out string errorReason)
+        {
+            if (string.IsNullOrEmpty(inputText))
+            {
+                errorReason = string.Format("{0}", STRING_EMPTY);
+                return false;
+            }
+            else if (!inputText.EndsWith(character))
+            {
+                errorReason = string.Format("{0} {1} {2} {3}", "Input", inputText, NO_TRAILING_CHAR, character);
+                return false;
+            }
+            else
+            {
+                errorReason = String.Empty;
+                return true;
+            }
+        }
+
     }
 }

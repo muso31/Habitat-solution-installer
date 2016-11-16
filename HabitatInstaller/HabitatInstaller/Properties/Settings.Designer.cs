@@ -46,5 +46,47 @@ namespace HabitatInstaller.Properties {
                 this["TempDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("c:\\Projects\\Habitat\\")]
+        public string ProjectPath {
+            get {
+                return ((string)(this["ProjectPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\websites\\\\Habitat.dev.local")]
+        public string WebsiteLocation {
+            get {
+                return ((string)(this["WebsiteLocation"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://habitat.dev.local")]
+        public string WebsiteUrl {
+            get {
+                return ((string)(this["WebsiteUrl"]));
+            }
+            set {
+                this["WebsiteUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("dev.local")]
+        public string Hostname {
+            get {
+                return ((string)(this["Hostname"]));
+            }
+            set {
+                this["Hostname"] = value;
+            }
+        }
     }
 }

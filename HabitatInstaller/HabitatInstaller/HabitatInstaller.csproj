@@ -55,10 +55,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Class\DownloadManager.cs" />
+    <Compile Include="Class\HabitatInstance.cs" />
     <Compile Include="Class\Validation.cs" />
+    <Compile Include="Install.xaml.cs">
+      <DependentUpon>Install.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Page Include="Install.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
