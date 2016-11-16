@@ -8,19 +8,17 @@
         ResizeMode="NoResize"
         Title="Settings" Height="300" Width="400">
     <Grid>
-        <Label Content="Habitat download Url:" Name="habitatUrlLabel" Padding="0" VerticalAlignment="Top" Margin="10,10,83.6,0" />
+        <Label Content="Habitat download Url:" Name="habitatUrlLabel" Padding="0" VerticalAlignment="Top" Margin="10,32,84,0" />
         <TextBox Height="23"
                  HorizontalAlignment="Left"
-                 Margin="10,30,0,0" Name="habitatUrl" VerticalAlignment="Top" Width="300" />
-        <Label Content="Temp directory:" Name="tempDirectoryLabel" Padding="0" VerticalAlignment="Top" Margin="10,60,83.6,0" />
+                 Margin="10,52,0,0" Name="habitatUrl" VerticalAlignment="Top" Width="300" />
+        <Label Content="Temp directory:" Name="tempDirectoryLabel" Padding="0" VerticalAlignment="Top" Margin="10,82,84,0" />
         <TextBox Height="23"
                  HorizontalAlignment="Left"
-                 Margin="10,80,0,0" Name="tempDirectory" VerticalAlignment="Top" Width="300" />
+                 Margin="10,102,0,0" Name="tempDirectory" VerticalAlignment="Top" Width="300" />
         <Button Content="Save"
-                Width="200"
-                Height="40"
                 Name="saveButton"
-                Click="Button_Click"/>
+                Click="SaveButton_Click" Margin="96,161,104,60"/>
 
     </Grid>
 </Window>

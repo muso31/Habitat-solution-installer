@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using HabitatInstaller.Class;
 
 namespace HabitatInstaller
 {
@@ -18,9 +19,21 @@ namespace HabitatInstaller
             tempDirectory.Text = Properties.Settings.Default.TempDirectory;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (tempDirectory.Text.EndsWith(@"\"))
+            string errorMessageTempDir, errorMessageValidField;
+            var isValidTempDir = Validation.DirectoryExistsWithTrailingSlash(tempDirectory.Text, out errorMessageTempDir);
+            var isValidField = Validation.IsValidFieldInput(habitatUrl.Text, out errorMessageValidField);
+
+            if (!isValidField)
+            {
+                MessageBox.Show(errorMessageValidField, "Confirmation", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else if (!isValidTempDir)
+            {
+                MessageBox.Show(errorMessageTempDir, "Confirmation", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else
             {
                 Properties.Settings.Default.HabitatUrl = habitatUrl.Text.ToString();
                 Properties.Settings.Default.TempDirectory = tempDirectory.Text.ToString();
@@ -28,9 +41,7 @@ namespace HabitatInstaller
 
                 this.Close();
             }
-            else {
-                //error message here
-            }
+
 
         }
     }
