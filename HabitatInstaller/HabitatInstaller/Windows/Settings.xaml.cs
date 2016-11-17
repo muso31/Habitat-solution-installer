@@ -12,7 +12,7 @@ namespace HabitatInstaller.Windows
         {
             InitializeComponent();
 
-            habitatUrl.Text = Properties.Settings.Default.HabitatUrl;
+            habitatUrl.Text = Properties.Settings.Default.SolutionDownloadUrl;
             if (string.IsNullOrEmpty(Properties.Settings.Default.TempDirectory))
                 Properties.Settings.Default.TempDirectory = System.IO.Path.GetTempPath();
 
@@ -35,7 +35,7 @@ namespace HabitatInstaller.Windows
             }
             else
             {
-                Properties.Settings.Default.HabitatUrl = habitatUrl.Text.ToString();
+                Properties.Settings.Default.SolutionDownloadUrl = habitatUrl.Text.ToString();
                 Properties.Settings.Default.TempDirectory = tempDirectory.Text.ToString();
                 Properties.Settings.Default.Save();
 

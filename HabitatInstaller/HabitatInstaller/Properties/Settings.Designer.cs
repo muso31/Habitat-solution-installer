@@ -26,12 +26,12 @@ namespace HabitatInstaller.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/Sitecore/Habitat/archive/master.zip")]
-        public string HabitatUrl {
+        public string SolutionDownloadUrl {
             get {
-                return ((string)(this["HabitatUrl"]));
+                return ((string)(this["SolutionDownloadUrl"]));
             }
             set {
-                this["HabitatUrl"] = value;
+                this["SolutionDownloadUrl"] = value;
             }
         }
         

@@ -5,9 +5,9 @@ namespace HabitatInstaller.Repository
     public class SolutionRepository : ISolutionRepository
     {
 
-        public Solution Create(Solution solution)
+        public ISolution Create(ISolution solution)
         {
-            solution.SolutionDownloadUrl = Properties.Settings.Default.HabitatUrl;
+            solution.SolutionDownloadUrl = Properties.Settings.Default.SolutionDownloadUrl;
             solution.TempDownloadDirectory = Properties.Settings.Default.TempDirectory;
             solution.SolutionInstallPath = Properties.Settings.Default.ProjectPath;
             solution.InstanceRoot = Properties.Settings.Default.WebsiteLocation;

@@ -4,6 +4,6 @@ namespace HabitatInstaller.Repository
 {
     public interface ISolutionRepository
     {
-        Solution Create(Solution solution);
+        ISolution Create(ISolution solution);
     }
 }
