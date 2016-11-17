@@ -1,7 +1,8 @@
 ﻿using System.Windows;
-using HabitatInstaller.Class;
+using HabitatInstaller.Models;
+using HabitatInstaller.Repository;
 
-namespace HabitatInstaller
+namespace HabitatInstaller.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -50,16 +51,17 @@ namespace HabitatInstaller
             }
             else
             {
-                var HabitatInstance = new HabitatInstance();
+                //update user values here 
+                Properties.Settings.Default.ProjectPath = projectPath.Text;
+                Properties.Settings.Default.WebsiteLocation = instanceRoot.Text;
+                Properties.Settings.Default.WebsiteUrl = publishUrl.Text;
+                Properties.Settings.Default.Hostname = hostname.Text;
 
-                HabitatInstance.HabitatDownloadUrl = Properties.Settings.Default.HabitatUrl;
-                HabitatInstance.TempDownloadDirectory = Properties.Settings.Default.TempDirectory;
-                HabitatInstance.SolutionInstallPath = projectPath.Text;
-                HabitatInstance.InstanceRoot = instanceRoot.Text;
-                HabitatInstance.PublishUrl = publishUrl.Text;
-                HabitatInstance.Hostname = hostname.Text;
+                var repository = new SolutionRepository();
 
-                string confirmation = string.Format("Install Habitat to: {0}?", HabitatInstance.SolutionInstallPath);
+                var habitatInstance = repository.Create(new Solution());
+
+                string confirmation = string.Format("Install Habitat to: {0}?", habitatInstance.SolutionInstallPath);
 
                 var result = MessageBox.Show(confirmation, "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
 

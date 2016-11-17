@@ -1,4 +1,4 @@
-﻿<Window x:Class="HabitatInstaller.MainWindow"
+﻿<Window x:Class="HabitatInstaller.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
         ResizeMode="NoResize"
         Title="Habitat installer" Height="500" Width="525" Background="#2e384e">
     <Grid>
-        <Image Source="habitat.png" Stretch="None" VerticalAlignment="Top" />
+        <Image Source="\habitat.png" Stretch="None" VerticalAlignment="Top" />
         <Label Content="Install Habitat solution to:"
                Name="projectPathLabel"
                Padding="0" 

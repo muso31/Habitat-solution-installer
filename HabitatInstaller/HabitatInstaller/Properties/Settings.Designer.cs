@@ -47,21 +47,27 @@ namespace HabitatInstaller.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("c:\\Projects\\Habitat\\")]
         public string ProjectPath {
             get {
                 return ((string)(this["ProjectPath"]));
             }
+            set {
+                this["ProjectPath"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\websites\\\\Habitat.dev.local")]
         public string WebsiteLocation {
             get {
                 return ((string)(this["WebsiteLocation"]));
+            }
+            set {
+                this["WebsiteLocation"] = value;
             }
         }
         

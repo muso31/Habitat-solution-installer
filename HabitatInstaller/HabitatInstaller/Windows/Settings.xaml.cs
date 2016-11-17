@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using HabitatInstaller.Class;
 
-namespace HabitatInstaller
+namespace HabitatInstaller.Windows
 {
     /// <summary>
     /// Interaction logic for Settings.xaml

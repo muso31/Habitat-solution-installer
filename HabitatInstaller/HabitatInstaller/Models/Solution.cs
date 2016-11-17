@@ -1,8 +1,8 @@
-﻿namespace HabitatInstaller.Class
+﻿namespace HabitatInstaller.Models
 {
-    public class HabitatInstance
+    public class Solution : ISolution
     {
-        public string HabitatDownloadUrl { get; set; }
+        public string SolutionDownloadUrl { get; set; }
 
         public string TempDownloadDirectory { get; set; }
 
