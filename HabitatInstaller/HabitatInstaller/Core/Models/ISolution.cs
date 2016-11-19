@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HabitatInstaller.Models
+namespace HabitatInstaller.Core.Models
 {
     public interface ISolution
     {

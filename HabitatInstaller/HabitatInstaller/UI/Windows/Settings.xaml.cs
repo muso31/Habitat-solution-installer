@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using HabitatInstaller.Class;
+using HabitatInstaller.Core.Class;
 
-namespace HabitatInstaller.Windows
+namespace HabitatInstaller.UI.Windows
 {
     /// <summary>
     /// Interaction logic for Settings.xaml
@@ -12,7 +12,7 @@ namespace HabitatInstaller.Windows
         {
             InitializeComponent();
 
-            habitatUrl.Text = Properties.Settings.Default.SolutionDownloadUrl;
+            solutionUrl.Text = Properties.Settings.Default.SolutionDownloadUrl;
             if (string.IsNullOrEmpty(Properties.Settings.Default.TempDirectory))
                 Properties.Settings.Default.TempDirectory = System.IO.Path.GetTempPath();
 
@@ -21,21 +21,19 @@ namespace HabitatInstaller.Windows
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            string errorMessageTempDir, errorMessageValidField;
-            var isValidField = Validation.IsValidFieldInput(habitatUrl.Text, out errorMessageValidField);
-            var isValidTempDir = Validation.DirectoryExists(tempDirectory.Text, out errorMessageTempDir);
+            string errorMessage;
 
-            if (!isValidField)
+            if (!Validation.IsValidFieldInput(solutionUrl.Text, out errorMessage))
             {
-                MessageBox.Show(errorMessageValidField, "Confirmation", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(errorMessage, "Confirmation", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-            else if (!isValidTempDir)
+            else if (!Validation.DirectoryExists(tempDirectory.Text, out errorMessage))
             {
-                MessageBox.Show(errorMessageTempDir, "Confirmation", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(errorMessage, "Confirmation", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
             {
-                Properties.Settings.Default.SolutionDownloadUrl = habitatUrl.Text.ToString();
+                Properties.Settings.Default.SolutionDownloadUrl = solutionUrl.Text.ToString();
                 Properties.Settings.Default.TempDirectory = tempDirectory.Text.ToString();
                 Properties.Settings.Default.Save();
 

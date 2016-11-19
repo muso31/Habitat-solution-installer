@@ -1,4 +1,6 @@
-﻿namespace HabitatInstaller.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HabitatInstaller.Core.Models
 {
     public class Solution : ISolution
     {

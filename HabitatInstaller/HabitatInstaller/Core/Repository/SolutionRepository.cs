@@ -1,4 +1,4 @@
-﻿using HabitatInstaller.Models;
+﻿using HabitatInstaller.Core.Models;
 
 namespace HabitatInstaller.Repository
 {
@@ -9,9 +9,9 @@ namespace HabitatInstaller.Repository
         {
             solution.SolutionDownloadUrl = Properties.Settings.Default.SolutionDownloadUrl;
             solution.TempDownloadDirectory = Properties.Settings.Default.TempDirectory;
-            solution.SolutionInstallPath = Properties.Settings.Default.ProjectPath;
-            solution.InstanceRoot = Properties.Settings.Default.WebsiteLocation;
-            solution.PublishUrl = Properties.Settings.Default.WebsiteUrl;
+            solution.SolutionInstallPath = Properties.Settings.Default.SolutionInstallPath;
+            solution.InstanceRoot = Properties.Settings.Default.InstanceRoot;
+            solution.PublishUrl = Properties.Settings.Default.PublishUrl;
             solution.Hostname = Properties.Settings.Default.Hostname;
 
             return solution;

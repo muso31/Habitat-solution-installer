@@ -1,4 +1,4 @@
-﻿using HabitatInstaller.Models;
+﻿using HabitatInstaller.Core.Models;
 
 namespace HabitatInstaller.Repository
 {

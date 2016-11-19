@@ -8,13 +8,13 @@
     <Setting Name="TempDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ProjectPath" Type="System.String" Scope="User">
+    <Setting Name="SolutionInstallPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">c:\Projects\Habitat\</Value>
     </Setting>
-    <Setting Name="WebsiteLocation" Type="System.String" Scope="User">
+    <Setting Name="InstanceRoot" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\\websites\\Habitat.dev.local</Value>
     </Setting>
-    <Setting Name="WebsiteUrl" Type="System.String" Scope="User">
+    <Setting Name="PublishUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://habitat.dev.local</Value>
     </Setting>
     <Setting Name="Hostname" Type="System.String" Scope="User">
