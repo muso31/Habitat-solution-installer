@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HabitatInstaller"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Habitat installer" Height="500" Width="525" Background="#2e384e">
+        Title="Habitat solution installer" Height="500" Width="525" Background="#2e384e">
     <Grid>
         <Image Source="..\Images\habitat.png" Stretch="None" VerticalAlignment="Top" />
         <Label Content="Install Habitat solution to:"

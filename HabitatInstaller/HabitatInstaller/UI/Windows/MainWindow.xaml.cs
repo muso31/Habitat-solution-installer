@@ -70,9 +70,7 @@ namespace HabitatInstaller.UI.Windows
 
                 //TODO: SETUP DI
                 var habitatsolution = _solutionRepository.Create(_solution);
-
-                string confirmation = string.Format("Install Habitat to: {0}?", habitatsolution.SolutionInstallPath);
-
+                var confirmation = string.Format("Install Habitat to: {0}?", habitatsolution.SolutionInstallPath);
                 var result = MessageBox.Show(confirmation, "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result.Equals(MessageBoxResult.Yes))

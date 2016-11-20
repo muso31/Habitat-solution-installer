@@ -6,15 +6,17 @@
         xmlns:local="clr-namespace:HabitatInstaller"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Step 1: Installing..." Height="300" Width="300" Background="#2e384e">
+        Title="Step 1: Downloading" Height="300" Width="300" Background="#2e384e">
     <Grid Margin="25,100,16.6,106">
         <Label Content="Downloading..."
                Name="lblDownloading"
                Padding="0" 
                VerticalAlignment="Top"
-               Foreground="LightGray" Margin="-6,-85,6,0" />
-        <ProgressBar Name="pbDownloadStatus" Minimum="0" Maximum="100" Value="0" Margin="-9,-64,4,103" />
-
-        <ProgressBar Name="pbZipStatus" Minimum="0" Maximum="100" Value="0" Margin="0,47,0,-47" Foreground="Red" Visibility="Hidden" />
+               Foreground="LightGray" Margin="-6,-85,6,0" Grid.ColumnSpan="3" />
+        <ProgressBar Name="pbDownloadStatus" Minimum="0" Maximum="100" Value="0" Margin="-9,-64,4,103" Grid.ColumnSpan="3" />
+        <Label Name="lblExtracting"
+               Padding="0" 
+               VerticalAlignment="Top"
+               Foreground="LightGray" Margin="-6,-27,6,0" />
     </Grid>
 </Window>
