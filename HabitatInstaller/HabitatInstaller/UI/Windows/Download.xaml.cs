@@ -23,13 +23,23 @@ namespace HabitatInstaller.UI.Windows
         {
             _solution = solution;
             InitializeComponent();
+            DownloadFile();
+            ExtractFiles();
+            RunNPM();
 
-            _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
+            //wait for npm install to finish
+            this.Close();
+            MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+        }
 
-            WebClient wc = new WebClient();
-            wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
-            wc.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
-            wc.DownloadFileAsync(new Uri(solution.SolutionDownloadUrl), _dlFilePath);
+        private void DownloadFile()
+        {
+                _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
+
+                WebClient wc = new WebClient();
+                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
+                wc.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
+                wc.DownloadFileAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
         }
 
         private void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -54,16 +64,6 @@ namespace HabitatInstaller.UI.Windows
                 {
                     lblExtracting.Content = "Extracting files...";
                 }));
-
-                this.Title = "Step 2: Extracting";
-
-                ExtractFiles();
-                RunNPM();
-
-                //wait for npm install to finish
-                this.Close();
-                MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
-
             }
         }
 
@@ -71,6 +71,8 @@ namespace HabitatInstaller.UI.Windows
         {
             try
             {
+                this.Title = "Step 2: Extracting";
+
                 var dirName = new DirectoryInfo(_solution.SolutionInstallPath).Name;
                 //TODO: CHECK TEMP PATH DOESNT EXIST
                 _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
