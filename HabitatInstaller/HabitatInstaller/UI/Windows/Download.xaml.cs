@@ -1,6 +1,5 @@
 ﻿using HabitatInstaller.Core.Models;
 using System;
-using System.ComponentModel;
 using System.Net;
 using System.Windows;
 using System.IO.Compression;
@@ -23,51 +22,36 @@ namespace HabitatInstaller.UI.Windows
         {
             _solution = solution;
             InitializeComponent();
-            DownloadFile();
-            ExtractFiles();
+            Start();
+        }
+        private async void Start()
+        {
+            //TODO ERROR HANLDING 
+            await DownloadFile();
+            lblDownloading.Content = "Download complete";
+            lblExtracting.Content = "Extracting files...";
+            await ExtractFiles();
             RunNPM();
 
-            //wait for npm install to finish
             this.Close();
             MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
         }
 
-        private void DownloadFile()
+        private async Task DownloadFile()
         {
-                _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
+            _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
 
-                WebClient wc = new WebClient();
-                wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
-                wc.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
-                wc.DownloadFileAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
+            WebClient wc = new WebClient();
+            wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
+            await wc.DownloadFileTaskAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
         }
 
         private void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-                pbDownloadStatus.Value = e.ProgressPercentage;
+            pbDownloadStatus.Value = e.ProgressPercentage;
         }
 
-        private void wc_DownloadComplete(object sender, AsyncCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                OutputErrorCloseApp(e.Error.Message);
-            }
-            else
-            {
-                //update UI
-                lblDownloading.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    lblDownloading.Content = "Download complete";
-                }));
-                lblExtracting.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    lblExtracting.Content = "Extracting files...";
-                }));
-            }
-        }
-
-        private void ExtractFiles()
+        private async Task ExtractFiles()
         {
             try
             {
@@ -77,7 +61,7 @@ namespace HabitatInstaller.UI.Windows
                 //TODO: CHECK TEMP PATH DOESNT EXIST
                 _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
 
-                ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
+                await Task.Run(() => ZipFile.ExtractToDirectory(_dlFilePath, _tempPath));
 
                 Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
                 Directory.Delete(_tempPath, true);
@@ -120,7 +104,7 @@ namespace HabitatInstaller.UI.Windows
                 //run node modules
                 ProcessStartInfo pInfo = new ProcessStartInfo();
                 pInfo.UseShellExecute = true;
-                pInfo.WorkingDirectory = _solution.SolutionInstallPath; 
+                pInfo.WorkingDirectory = _solution.SolutionInstallPath;
                 pInfo.FileName = "cmd.exe";
                 pInfo.Arguments = "/c npm install";
 
@@ -136,7 +120,8 @@ namespace HabitatInstaller.UI.Windows
             }
         }
 
-        private void OutputErrorCloseApp(string errorMessage) {
+        private void OutputErrorCloseApp(string errorMessage)
+        {
             this.Close();
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
