@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace HabitatInstaller.UI.Windows
 {
@@ -26,11 +27,11 @@ namespace HabitatInstaller.UI.Windows
         }
         private async void Start()
         {
-            //TODO ERROR HANLDING 
             await DownloadFile();
             lblDownloading.Content = "Download complete";
             lblExtracting.Content = "Extracting files...";
             await ExtractFiles();
+
             RunNPM();
 
             this.Close();
@@ -43,12 +44,21 @@ namespace HabitatInstaller.UI.Windows
 
             WebClient wc = new WebClient();
             wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
+            wc.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
             await wc.DownloadFileTaskAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
         }
 
         private void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             pbDownloadStatus.Value = e.ProgressPercentage;
+        }
+
+        private void wc_DownloadComplete(object sender, AsyncCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                OutputErrorCloseWindow(e.Error.Message);
+            }
         }
 
         private async Task ExtractFiles()
@@ -62,8 +72,9 @@ namespace HabitatInstaller.UI.Windows
                 _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
 
                 await Task.Run(() => ZipFile.ExtractToDirectory(_dlFilePath, _tempPath));
-
-                Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
+                await Task.Delay(2000);
+                await Task.Run(() => Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath));
+                await Task.Delay(2000);
                 Directory.Delete(_tempPath, true);
 
                 //update the z.Habitat.DevSettings.config file
@@ -91,7 +102,7 @@ namespace HabitatInstaller.UI.Windows
                     Directory.Delete(_solution.SolutionInstallPath.TrimEnd('\\'), true);
                 }
 
-                OutputErrorCloseApp(e.ToString());
+                OutputErrorCloseWindow(e.ToString());
             }
         }
 
@@ -120,10 +131,11 @@ namespace HabitatInstaller.UI.Windows
             }
         }
 
-        private void OutputErrorCloseApp(string errorMessage)
+        private void OutputErrorCloseWindow(string errorMessage)
         {
-            this.Close();
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            this.Close();
+            return;
         }
     }
 }
