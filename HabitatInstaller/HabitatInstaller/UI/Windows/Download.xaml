@@ -18,5 +18,6 @@
                Padding="0" 
                VerticalAlignment="Top"
                Foreground="LightGray" Margin="-6,-27,6,0" />
+        <ProgressBar Name="pbExtractStatus" Minimum="0" Maximum="100" Value="0" Margin="-9,-6,4,45" Visibility="Hidden" />
     </Grid>
 </Window>

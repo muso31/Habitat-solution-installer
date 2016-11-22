@@ -18,24 +18,42 @@ namespace HabitatInstaller.UI.Windows
         private string _tempPath;
         private string _dlFilePath;
         private ISolution _solution;
+        private bool _errors = false;
 
         public DownloadWindow(ISolution solution)
         {
             _solution = solution;
             InitializeComponent();
             Start();
+
+            //Task taskA = Task.Run(() => DownloadFile());
+
+            //var taskDL = ExtractFiles();
+            //taskDL.ContinueWith(t =>
+            //{
+            //    OutputErrorCloseWindow(t.Exception.ToString());
+            //}, TaskContinuationOptions.OnlyOnFaulted);
         }
-        private async void Start()
+        private async Task Start()
         {
             await DownloadFile();
+
             lblDownloading.Content = "Download complete";
-            lblExtracting.Content = "Extracting files...";
+
+           // this.Dispatcher.Invoke(() =>
+            //{
+                lblExtracting.Content = "Extracting files...";
+                pbExtractStatus.Visibility = Visibility.Visible;
+            //});
+
             await ExtractFiles();
 
-            RunNPM();
-
-            this.Close();
-            MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+            if (!_errors)
+            {
+                RunNPM();
+                this.Close();
+                MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+            }
         }
 
         private async Task DownloadFile()
@@ -71,7 +89,7 @@ namespace HabitatInstaller.UI.Windows
                 //TODO: CHECK TEMP PATH DOESNT EXIST
                 _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
 
-                await Task.Run(() => ZipFile.ExtractToDirectory(_dlFilePath, _tempPath));
+                ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
                 await Task.Delay(2000);
                 await Task.Run(() => Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath));
                 await Task.Delay(2000);
@@ -133,9 +151,13 @@ namespace HabitatInstaller.UI.Windows
 
         private void OutputErrorCloseWindow(string errorMessage)
         {
-            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            this.Close();
-            return;
+            this.Dispatcher.Invoke(() =>
+            {
+                _errors = true;
+                MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
+                return;
+            });
         }
     }
 }
