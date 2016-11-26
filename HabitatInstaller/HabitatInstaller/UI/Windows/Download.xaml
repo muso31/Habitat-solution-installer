@@ -16,7 +16,7 @@
                Foreground="LightGray" Margin="-6,-85,6,0" Grid.ColumnSpan="3" />
         <ProgressBar Name="pbDownloadStatus" Minimum="0" Maximum="100" Value="0" Margin="-9,-64,4,103" Grid.ColumnSpan="3" />
         <xctk:BusyIndicator Name="extractLabel" IsBusy="False" BusyContent="Extracting files..." >
-            <xctk:BusyIndicator.OverlayStyle
+            <xctk:BusyIndicator.OverlayStyle>
                 <Style TargetType="Rectangle">
                     <Setter Property="Fill" Value="#2e384e" />
                 </Style>
