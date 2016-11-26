@@ -59,10 +59,8 @@
             HorizontalAlignment="Left"
             Margin="24,303,0,0" x:Name="hostname" VerticalAlignment="Top" Width="300" />
         <Button Content="Install"
-		HorizontalAlignment="Center"
-		Margin="24,352,194.4,0"
+		Margin="24,352,182.4,0"
 		VerticalAlignment="Top"
-		Width="300"
         Height="75"
 		Click="InstallButton_Click"/>
         <Button Content="Settings"

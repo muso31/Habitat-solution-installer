@@ -26,35 +26,20 @@ namespace HabitatInstaller.UI.Windows
             _solution = solution;
             InitializeComponent();
             Start();
-
-            //Task taskA = Task.Run(() => DownloadFile());
-
-            //var taskDL = ExtractFiles();
-            //taskDL.ContinueWith(t =>
-            //{
-            //    OutputErrorCloseWindow(t.Exception.ToString());
-            //}, TaskContinuationOptions.OnlyOnFaulted);
         }
-        private async void Start()
+        private async Task Start()
         {
+            Thread.Sleep(500);
             await DownloadFile();
-
-            // lblDownloading.Content = "Download complete";
-
-            //// this.Dispatcher.Invoke(() =>
-            // //{
-            //     lblExtracting.Content = "Extracting files...";
-            //     pbExtractStatus.Visibility = Visibility.Visible;
-            // //});
 
             await ExtractFiles();
 
-            //if (!_errors)
-            //{
-            //    RunNPM();
-            //    this.Close();
-            //    MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
-            //}
+            if (!_errors)
+            {
+                await RunNPM();
+                this.Close();
+                MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+            }
         }
 
         private async Task DownloadFile()
@@ -85,109 +70,114 @@ namespace HabitatInstaller.UI.Windows
 
         private async Task ExtractFiles()
         {
-            try
-            {
-               var updateUI = Task.Factory.StartNew(() =>
+               await Task.Run(() =>
                 {
                     this.Dispatcher.Invoke(() =>
                     {
                         lblDownloading.Content = "Download complete";
                         lblExtracting.Content = "Extracting files...";
-                        pbExtractStatus.Visibility = Visibility.Visible;
+                        //pbExtractStatus.Visibility = Visibility.Visible;
                         this.Title = "Step 2: Extracting";
                     });
                 });
 
-                await updateUI;
-
-                var extractFiles = Task.Factory.StartNew(() =>
+                await Task.Run(() =>
                 {
-                    var dirName = new DirectoryInfo(_solution.SolutionInstallPath).Name;
-                    //TODO: CHECK TEMP PATH DOESNT EXIST
-                    _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
-
-                    ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
-                });
-
-                await extractFiles;
-
-                var moveFiles = Task.Factory.StartNew(() =>
-                {
-                    // Directory.SetAccessControl(_tempPath + "Habitat-master");
-                    Thread.Sleep(4000);
-                    //ACCESS IS DENIED ERROR
-                    Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
-                    Thread.Sleep(4000);
-                    Directory.Delete(_tempPath, true);
-                });
-
-                await moveFiles;
-
-                var updateFiles = Task.Factory.StartNew(() =>
-                {
-                    //update the z.Habitat.DevSettings.config file
-                    string pathToDevSettingsFile = _solution.SolutionInstallPath + @"src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
-                    File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(@"C:\projects\Habitat\", _solution.SolutionInstallPath));
-                    File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace("dev.local", _solution.Hostname));
-                    //update the gulp-config.js
-                    var gulpFile = _solution.SolutionInstallPath + "gulp-config.js";
-                    File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(@"C:\\websites\\Habitat.dev.local", _solution.InstanceRoot));
-                    //update the publishsettings.targets file
-                    var publishSettingsFile = _solution.SolutionInstallPath + "publishsettings.targets";
-                    File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace("http://habitat.dev.local", _solution.PublishUrl));
-                    this.Dispatcher.Invoke(() =>
+                    try
                     {
-                        lblExtracting.Content = "Extract complete";
-                    });
+                        var dirName = new DirectoryInfo(_solution.SolutionInstallPath).Name;
+                        //TODO: CHECK TEMP PATH DOESNT EXIST
+                        _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
+
+                        ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        OutputErrorCloseWindow(ex.ToString());
+                    }
                 });
 
-                await updateFiles;
-            }
-            catch (Exception e)
-            {
-                //clean up the folders
-                if (Directory.Exists(_tempPath))
+                await Task.Run(async () =>
                 {
-                    Directory.Delete(_tempPath, true);
-                }
-                if (Directory.Exists(_solution.SolutionInstallPath.TrimEnd('\\')))
-                {
-                    Directory.Delete(_solution.SolutionInstallPath.TrimEnd('\\'), true);
-                }
+                    try
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            lblExtracting.Content = "Extract complete";
+                        });
+                        Thread.Sleep(500);
+                        //TODO: resolve ACCESS IS DENIED ERROR
+                        // Directory.SetAccessControl(_tempPath + "Habitat-master");
+                        await Task.Run(() =>
+                        {
+                            Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
+                        });
+                        await Task.Run(() =>
+                        {
+                            Directory.Delete(_tempPath, true);
+                        });
 
-                OutputErrorCloseWindow(e.ToString());
-            }
+                        //update the z.Habitat.DevSettings.config file
+                        string pathToDevSettingsFile = _solution.SolutionInstallPath + @"src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
+                        File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(@"C:\projects\Habitat\", _solution.SolutionInstallPath));
+                        File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace("dev.local", _solution.Hostname));
+                        //update the gulp-config.js
+                        var gulpFile = _solution.SolutionInstallPath + "gulp-config.js";
+                        File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(@"C:\\websites\\Habitat.dev.local", _solution.InstanceRoot));
+                        //update the publishsettings.targets file
+                        var publishSettingsFile = _solution.SolutionInstallPath + "publishsettings.targets";
+                        File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace("http://habitat.dev.local", _solution.PublishUrl));
+                    }
+                    catch (Exception ex)
+                    {
+                        //clean up the folders
+                        if (Directory.Exists(_tempPath))
+                        {
+                            Directory.Delete(_tempPath, true);
+                        }
+                        if (Directory.Exists(_solution.SolutionInstallPath.TrimEnd('\\')))
+                        {
+                            Directory.Delete(_solution.SolutionInstallPath.TrimEnd('\\'), true);
+                        }
+
+                        OutputErrorCloseWindow(ex.ToString());
+                    }
+                });
+
         }
 
-        private void RunNPM()
+        private async Task RunNPM()
         {
-            try
-            {
-                this.Title = "Step 3: Running npm install";
-                //TODO: catch error if npm fails
-                //run node modules
-                ProcessStartInfo pInfo = new ProcessStartInfo();
-                pInfo.UseShellExecute = true;
-                pInfo.WorkingDirectory = _solution.SolutionInstallPath;
-                pInfo.FileName = "cmd.exe";
-                pInfo.Arguments = "/c npm install";
+                try
+                {
+                    this.Title = "Step 3: Running npm install";
+                    //TODO: catch error if npm fails
+                    //run node modules
+                    ProcessStartInfo pInfo = new ProcessStartInfo();
+                    pInfo.UseShellExecute = true;
+                    pInfo.WorkingDirectory = _solution.SolutionInstallPath;
+                    pInfo.FileName = "cmd.exe";
+                    pInfo.Arguments = "/c npm install";
 
-                var p = Process.Start(pInfo);
-                p.WaitForExit();
+                    var p = Process.Start(pInfo);
+                    p.WaitForExit();
 
-                //pInfo.Arguments = "/c gulp";
-                //Process t = Process.Start(pInfo);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "NPM error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                    //pInfo.Arguments = "/c gulp";
+                    //Process t = Process.Start(pInfo);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "NPM error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
         }
 
         private void OutputErrorCloseWindow(string errorMessage)
         {
             _errors = true;
-            this.Close();
+            this.Dispatcher.Invoke(() =>
+            {
+                this.Close();
+            });
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
