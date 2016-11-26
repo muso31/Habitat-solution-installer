@@ -75,7 +75,7 @@ namespace HabitatInstaller.UI.Windows
                     this.Dispatcher.Invoke(() =>
                     {
                         lblDownloading.Content = "Download complete";
-                        lblExtracting.Content = "Extracting files...";
+                        extractLabel.IsBusy = true;
                         //pbExtractStatus.Visibility = Visibility.Visible;
                         this.Title = "Step 2: Extracting";
                     });
@@ -97,24 +97,20 @@ namespace HabitatInstaller.UI.Windows
                     }
                 });
 
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
                     try
                     {
-                        this.Dispatcher.Invoke(() =>
-                        {
-                            lblExtracting.Content = "Extract complete";
-                        });
-                        Thread.Sleep(500);
+                        Thread.Sleep(4000);
                         //TODO: resolve ACCESS IS DENIED ERROR
                         // Directory.SetAccessControl(_tempPath + "Habitat-master");
-                        await Task.Run(() =>
+                        Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
+                        Thread.Sleep(2000);
+                        Directory.Delete(_tempPath, true);
+
+                        this.Dispatcher.Invoke(() =>
                         {
-                            Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
-                        });
-                        await Task.Run(() =>
-                        {
-                            Directory.Delete(_tempPath, true);
+                            extractLabel.IsBusy = false;
                         });
 
                         //update the z.Habitat.DevSettings.config file
@@ -148,27 +144,27 @@ namespace HabitatInstaller.UI.Windows
 
         private async Task RunNPM()
         {
-                try
-                {
-                    this.Title = "Step 3: Running npm install";
-                    //TODO: catch error if npm fails
-                    //run node modules
-                    ProcessStartInfo pInfo = new ProcessStartInfo();
-                    pInfo.UseShellExecute = true;
-                    pInfo.WorkingDirectory = _solution.SolutionInstallPath;
-                    pInfo.FileName = "cmd.exe";
-                    pInfo.Arguments = "/c npm install";
+            try
+            {
+                this.Title = "Step 3: Running npm install";
+                //TODO: catch error if npm fails
+                //run node modules
+                ProcessStartInfo pInfo = new ProcessStartInfo();
+                pInfo.UseShellExecute = true;
+                pInfo.WorkingDirectory = _solution.SolutionInstallPath;
+                pInfo.FileName = "cmd.exe";
+                pInfo.Arguments = "/c npm install";
 
-                    var p = Process.Start(pInfo);
-                    p.WaitForExit();
+                var p = Process.Start(pInfo);
+                p.WaitForExit();
 
-                    //pInfo.Arguments = "/c gulp";
-                    //Process t = Process.Start(pInfo);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "NPM error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                //pInfo.Arguments = "/c gulp";
+                //Process t = Process.Start(pInfo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "NPM error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void OutputErrorCloseWindow(string errorMessage)
