@@ -7,6 +7,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Threading;
 
 namespace HabitatInstaller.UI.Windows
 {
@@ -34,26 +35,26 @@ namespace HabitatInstaller.UI.Windows
             //    OutputErrorCloseWindow(t.Exception.ToString());
             //}, TaskContinuationOptions.OnlyOnFaulted);
         }
-        private async Task Start()
+        private async void Start()
         {
             await DownloadFile();
 
-            lblDownloading.Content = "Download complete";
+            // lblDownloading.Content = "Download complete";
 
-           // this.Dispatcher.Invoke(() =>
-            //{
-                lblExtracting.Content = "Extracting files...";
-                pbExtractStatus.Visibility = Visibility.Visible;
-            //});
+            //// this.Dispatcher.Invoke(() =>
+            // //{
+            //     lblExtracting.Content = "Extracting files...";
+            //     pbExtractStatus.Visibility = Visibility.Visible;
+            // //});
 
             await ExtractFiles();
 
-            if (!_errors)
-            {
-                RunNPM();
-                this.Close();
-                MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
-            }
+            //if (!_errors)
+            //{
+            //    RunNPM();
+            //    this.Close();
+            //    MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+            //}
         }
 
         private async Task DownloadFile()
@@ -68,7 +69,10 @@ namespace HabitatInstaller.UI.Windows
 
         private void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            pbDownloadStatus.Value = e.ProgressPercentage;
+            this.Dispatcher.Invoke(() =>
+            {
+                pbDownloadStatus.Value = e.ProgressPercentage;
+            });
         }
 
         private void wc_DownloadComplete(object sender, AsyncCompletedEventArgs e)
@@ -83,30 +87,61 @@ namespace HabitatInstaller.UI.Windows
         {
             try
             {
-                this.Title = "Step 2: Extracting";
+               var updateUI = Task.Factory.StartNew(() =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        lblDownloading.Content = "Download complete";
+                        lblExtracting.Content = "Extracting files...";
+                        pbExtractStatus.Visibility = Visibility.Visible;
+                        this.Title = "Step 2: Extracting";
+                    });
+                });
 
-                var dirName = new DirectoryInfo(_solution.SolutionInstallPath).Name;
-                //TODO: CHECK TEMP PATH DOESNT EXIST
-                _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
+                await updateUI;
 
-                ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
-                await Task.Delay(2000);
-                await Task.Run(() => Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath));
-                await Task.Delay(2000);
-                Directory.Delete(_tempPath, true);
+                var extractFiles = Task.Factory.StartNew(() =>
+                {
+                    var dirName = new DirectoryInfo(_solution.SolutionInstallPath).Name;
+                    //TODO: CHECK TEMP PATH DOESNT EXIST
+                    _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
 
-                //update the z.Habitat.DevSettings.config file
-                string pathToDevSettingsFile = _solution.SolutionInstallPath + @"src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
-                File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(@"C:\projects\Habitat\", _solution.SolutionInstallPath));
-                File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace("dev.local", _solution.Hostname));
-                //update the gulp-config.js
-                var gulpFile = _solution.SolutionInstallPath + "gulp-config.js";
-                File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(@"C:\\websites\\Habitat.dev.local", _solution.InstanceRoot));
-                //update the publishsettings.targets file
-                var publishSettingsFile = _solution.SolutionInstallPath + "publishsettings.targets";
-                File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace("http://habitat.dev.local", _solution.PublishUrl));
+                    ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
+                });
 
-                lblExtracting.Content = "Extract complete";
+                await extractFiles;
+
+                var moveFiles = Task.Factory.StartNew(() =>
+                {
+                    // Directory.SetAccessControl(_tempPath + "Habitat-master");
+                    Thread.Sleep(4000);
+                    //ACCESS IS DENIED ERROR
+                    Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
+                    Thread.Sleep(4000);
+                    Directory.Delete(_tempPath, true);
+                });
+
+                await moveFiles;
+
+                var updateFiles = Task.Factory.StartNew(() =>
+                {
+                    //update the z.Habitat.DevSettings.config file
+                    string pathToDevSettingsFile = _solution.SolutionInstallPath + @"src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
+                    File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(@"C:\projects\Habitat\", _solution.SolutionInstallPath));
+                    File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace("dev.local", _solution.Hostname));
+                    //update the gulp-config.js
+                    var gulpFile = _solution.SolutionInstallPath + "gulp-config.js";
+                    File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(@"C:\\websites\\Habitat.dev.local", _solution.InstanceRoot));
+                    //update the publishsettings.targets file
+                    var publishSettingsFile = _solution.SolutionInstallPath + "publishsettings.targets";
+                    File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace("http://habitat.dev.local", _solution.PublishUrl));
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        lblExtracting.Content = "Extract complete";
+                    });
+                });
+
+                await updateFiles;
             }
             catch (Exception e)
             {
@@ -151,13 +186,10 @@ namespace HabitatInstaller.UI.Windows
 
         private void OutputErrorCloseWindow(string errorMessage)
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                _errors = true;
-                MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
-                return;
-            });
+            _errors = true;
+            this.Close();
+            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
         }
     }
 }
