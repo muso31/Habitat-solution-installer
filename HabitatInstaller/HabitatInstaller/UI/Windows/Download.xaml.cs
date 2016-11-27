@@ -29,7 +29,6 @@ namespace HabitatInstaller.UI.Windows
         }
         private async Task Start()
         {
-            Thread.Sleep(500);
             await DownloadFile();
 
             await ExtractFiles();
@@ -101,7 +100,7 @@ namespace HabitatInstaller.UI.Windows
                     try
                     {
                         Thread.Sleep(4000);
-                        //TODO: resolve ACCESS IS DENIED ERROR
+                        //TODO: resolve ACCESS IS DENIED ERROR?
                         // Directory.SetAccessControl(_tempPath + "Habitat-master");
                         Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
                         Thread.Sleep(2000);
@@ -157,7 +156,6 @@ namespace HabitatInstaller.UI.Windows
                 var p = Process.Start(pInfo);
                 p.EnableRaisingEvents = true;
                 p.Exited += new EventHandler(ProcessExited);
-                //p.WaitForExit();
 
                 //pInfo.Arguments = "/c gulp";
                 //Process t = Process.Start(pInfo);
@@ -168,15 +166,13 @@ namespace HabitatInstaller.UI.Windows
             }
         }
 
-        void ProcessExited(object sender, System.EventArgs e)
+        private void ProcessExited(object sender, System.EventArgs e)
         {
-            //Handle process exit here
             this.Dispatcher.Invoke(() =>
             {
                 this.Close();
             });
             MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
-
         }
 
         private void OutputErrorCloseWindow(Exception ex)
