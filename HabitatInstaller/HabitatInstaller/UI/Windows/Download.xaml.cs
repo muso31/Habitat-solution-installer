@@ -37,8 +37,6 @@ namespace HabitatInstaller.UI.Windows
             if (!_errors)
             {
                 await RunNPM();
-                this.Close();
-                MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
             }
         }
 
@@ -46,10 +44,12 @@ namespace HabitatInstaller.UI.Windows
         {
             _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
 
-            WebClient wc = new WebClient();
-            wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
-            wc.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
-            await wc.DownloadFileTaskAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
+            using (var client = new WebClient())
+            {
+                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
+                client.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
+                await client.DownloadFileTaskAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
+            }
         }
 
         private void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -64,7 +64,7 @@ namespace HabitatInstaller.UI.Windows
         {
             if (e.Error != null)
             {
-                OutputErrorCloseWindow(e.Error.Message);
+                OutputErrorCloseWindow(e.Error);
             }
         }
 
@@ -76,7 +76,6 @@ namespace HabitatInstaller.UI.Windows
                     {
                         lblDownloading.Content = "Download complete";
                         extractLabel.IsBusy = true;
-                        //pbExtractStatus.Visibility = Visibility.Visible;
                         this.Title = "Step 2: Extracting";
                     });
                 });
@@ -93,7 +92,7 @@ namespace HabitatInstaller.UI.Windows
                     }
                     catch (Exception ex)
                     {
-                        OutputErrorCloseWindow(ex.ToString());
+                        OutputErrorCloseWindow(ex);
                     }
                 });
 
@@ -136,7 +135,7 @@ namespace HabitatInstaller.UI.Windows
                             Directory.Delete(_solution.SolutionInstallPath.TrimEnd('\\'), true);
                         }
 
-                        OutputErrorCloseWindow(ex.ToString());
+                        OutputErrorCloseWindow(ex);
                     }
                 });
 
@@ -156,7 +155,9 @@ namespace HabitatInstaller.UI.Windows
                 pInfo.Arguments = "/c npm install";
 
                 var p = Process.Start(pInfo);
-                p.WaitForExit();
+                p.EnableRaisingEvents = true;
+                p.Exited += new EventHandler(ProcessExited);
+                //p.WaitForExit();
 
                 //pInfo.Arguments = "/c gulp";
                 //Process t = Process.Start(pInfo);
@@ -167,14 +168,25 @@ namespace HabitatInstaller.UI.Windows
             }
         }
 
-        private void OutputErrorCloseWindow(string errorMessage)
+        void ProcessExited(object sender, System.EventArgs e)
+        {
+            //Handle process exit here
+            this.Dispatcher.Invoke(() =>
+            {
+                this.Close();
+            });
+            MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+
+        }
+
+        private void OutputErrorCloseWindow(Exception ex)
         {
             _errors = true;
             this.Dispatcher.Invoke(() =>
             {
                 this.Close();
             });
-            MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(ex.Message.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
     }
