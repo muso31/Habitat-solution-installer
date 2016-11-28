@@ -43,6 +43,14 @@ namespace HabitatInstaller.UI.Windows
         {
             _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
 
+            //first delete file
+            if (File.Exists(_dlFilePath))
+            {
+                File.Delete(_dlFilePath);
+            }
+
+            Thread.Sleep(500);
+
             using (var client = new WebClient())
             {
                 client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
