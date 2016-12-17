@@ -2,7 +2,6 @@
 using HabitatInstaller.Core.Models;
 using HabitatInstaller.Repository;
 using HabitatInstaller.Core.Class;
-using System.Diagnostics;
 
 namespace HabitatInstaller.UI.Windows
 {
@@ -20,15 +19,15 @@ namespace HabitatInstaller.UI.Windows
             _solution = solution;
         }
 
-        public MainWindow() : this(new SolutionRepository(), new Solution())
+        public MainWindow() : this(new SolutionRepository(), new HabitatSolution())
         {
             InitializeComponent();
 
             //TODO: SETUP MODEL BINDING
-            solutionInstallPath.Text = Properties.Settings.Default.SolutionInstallPath;
-            instanceRoot.Text = Properties.Settings.Default.InstanceRoot;
-            publishUrl.Text = Properties.Settings.Default.PublishUrl;
-            hostname.Text = Properties.Settings.Default.Hostname;
+            solutionInstallPath.Text = Properties.Settings.Default.SolutionInstallPathDefault;
+            instanceRoot.Text = Properties.Settings.Default.InstanceRootDefault;
+            publishUrl.Text = Properties.Settings.Default.PublishUrlDefault;
+            hostname.Text = Properties.Settings.Default.HostnameDefault;
         }
 
         private void SettingButton_Click(object sender, RoutedEventArgs e)
@@ -62,26 +61,62 @@ namespace HabitatInstaller.UI.Windows
             }
             else
             {
-                //TODO: SETUP MODEL BINDING
-                Properties.Settings.Default.SolutionInstallPath = solutionInstallPath.Text;
-                Properties.Settings.Default.InstanceRoot = instanceRoot.Text;
-                Properties.Settings.Default.PublishUrl = publishUrl.Text;
-                Properties.Settings.Default.Hostname = hostname.Text;
-
                 //TODO: SETUP DI
-                var habitatsolution = _solutionRepository.Create(_solution);
-                var confirmation = string.Format("Install Habitat to: {0}?", habitatsolution.SolutionInstallPath);
+                _solution = _solutionRepository.MapUserInput(_solution);
+
+                var confirmation = string.Format("Install Habitat to: {0}?", _solution.SolutionInstallPath);
                 var result = MessageBox.Show(confirmation, "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result.Equals(MessageBoxResult.Yes))
                 {
-                    var downloadWindow = new DownloadWindow(habitatsolution);
+                    var downloadWindow = new DownloadWindow(_solution);
                     downloadWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     downloadWindow.Owner = Application.Current.MainWindow;
                     downloadWindow.ShowDialog();
                 }
             }
         }
+
+        public string SolutionInstallPathText
+        {
+            get { return solutionInstallPath.Text; }
+
+            set
+            {
+                solutionInstallPath.Text = value;
+            }
+        }
+
+        public string InstanceRootText
+        {
+            get { return instanceRoot.Text; }
+
+            set
+            {
+                instanceRoot.Text = value;
+            }
+        }
+
+        public string PublishUrlText
+        {
+            get { return publishUrl.Text; }
+
+            set
+            {
+                publishUrl.Text = value;
+            }
+        }
+
+        public string HostnameText
+        {
+            get { return hostname.Text; }
+
+            set
+            {
+                hostname.Text = value;
+            }
+        }
+
 
     }
 }

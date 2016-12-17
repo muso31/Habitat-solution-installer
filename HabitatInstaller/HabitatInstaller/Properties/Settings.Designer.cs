@@ -47,57 +47,45 @@ namespace HabitatInstaller.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("c:\\Projects\\Habitat\\")]
-        public string SolutionInstallPath {
+        public string SolutionInstallPathDefault {
             get {
-                return ((string)(this["SolutionInstallPath"]));
-            }
-            set {
-                this["SolutionInstallPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\websites\\\\Habitat.dev.local")]
-        public string InstanceRoot {
-            get {
-                return ((string)(this["InstanceRoot"]));
-            }
-            set {
-                this["InstanceRoot"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://habitat.dev.local")]
-        public string PublishUrl {
-            get {
-                return ((string)(this["PublishUrl"]));
-            }
-            set {
-                this["PublishUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("dev.local")]
-        public string Hostname {
-            get {
-                return ((string)(this["Hostname"]));
-            }
-            set {
-                this["Hostname"] = value;
+                return ((string)(this["SolutionInstallPathDefault"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.0.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\websites\\\\Habitat.dev.local")]
+        public string InstanceRootDefault {
+            get {
+                return ((string)(this["InstanceRootDefault"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://habitat.dev.local")]
+        public string PublishUrlDefault {
+            get {
+                return ((string)(this["PublishUrlDefault"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("dev.local")]
+        public string HostnameDefault {
+            get {
+                return ((string)(this["HostnameDefault"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.0.2")]
         public string Version {
             get {
                 return ((string)(this["Version"]));

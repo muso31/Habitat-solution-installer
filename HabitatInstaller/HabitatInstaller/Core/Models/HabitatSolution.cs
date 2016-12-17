@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HabitatInstaller.Core.Models
+﻿namespace HabitatInstaller.Core.Models
 {
-    public class Solution : ISolution
+    public class HabitatSolution : ISolution
     {
         public string SolutionDownloadUrl { get; set; }
 

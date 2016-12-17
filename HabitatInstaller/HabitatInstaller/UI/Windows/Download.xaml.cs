@@ -43,19 +43,18 @@ namespace HabitatInstaller.UI.Windows
         {
             _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
 
-            //first delete file
-            if (File.Exists(_dlFilePath))
-            {
-                File.Delete(_dlFilePath);
-            }
-
-            Thread.Sleep(500);
-
             using (var client = new WebClient())
             {
+                client.Headers.Add("Accept: text/html, application/xhtml+xml, */*");
+                client.Headers.Add("User-Agent: Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; WOW64; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0");
                 client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(wc_DownloadProgressChanged);
                 client.DownloadFileCompleted += new AsyncCompletedEventHandler(wc_DownloadComplete);
                 await client.DownloadFileTaskAsync(new Uri(_solution.SolutionDownloadUrl), _dlFilePath);
+
+                while (client.IsBusy)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
             }
         }
 

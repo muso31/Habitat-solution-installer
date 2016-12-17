@@ -1,18 +1,22 @@
 ﻿using HabitatInstaller.Core.Models;
+using HabitatInstaller.UI.Windows;
+using System.Windows;
 
 namespace HabitatInstaller.Repository
 {
     public class SolutionRepository : ISolutionRepository
     {
-
-        public ISolution Create(ISolution solution)
+        public ISolution MapUserInput(ISolution solution)
         {
+            var _form = Application.Current.Windows[0] as MainWindow;
+
+            solution.SolutionInstallPath = _form.SolutionInstallPathText;
+            solution.InstanceRoot = _form.InstanceRootText;
+            solution.PublishUrl = _form.PublishUrlText;
+            solution.Hostname = _form.HostnameText;
+            //changeable saved fields
             solution.SolutionDownloadUrl = Properties.Settings.Default.SolutionDownloadUrl;
             solution.TempDownloadDirectory = Properties.Settings.Default.TempDirectory;
-            solution.SolutionInstallPath = Properties.Settings.Default.SolutionInstallPath;
-            solution.InstanceRoot = Properties.Settings.Default.InstanceRoot;
-            solution.PublishUrl = Properties.Settings.Default.PublishUrl;
-            solution.Hostname = Properties.Settings.Default.Hostname;
 
             return solution;
         }

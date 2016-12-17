@@ -82,7 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\Models\Solution.cs" />
+    <Compile Include="Core\Models\HabitatSolution.cs" />
     <Compile Include="Core\Class\Validation.cs" />
     <Compile Include="Core\Models\ISolution.cs" />
     <Compile Include="Core\Repository\ISolutionRepository.cs" />
