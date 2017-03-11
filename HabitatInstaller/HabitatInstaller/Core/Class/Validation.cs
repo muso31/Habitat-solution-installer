@@ -14,17 +14,17 @@ namespace HabitatInstaller.Core.Class
         {
             if (string.IsNullOrEmpty(path))
             {
-                errorReason = string.Format("{0}", STRING_EMPTY);
+                errorReason = $"{STRING_EMPTY}";
                 return false;
             }
             else if (!Directory.Exists(path))
             {
-                errorReason = string.Format("{0} {1}", path, PATH_DOES_NOT_EXIST);
+                errorReason = $"{path} {PATH_DOES_NOT_EXIST}";
                 return false;
             }
             else if (!path.EndsWith(@"\"))
             {
-                errorReason = string.Format("{0} {1} {2} {3}", "Input", path, NO_TRAILING_CHAR, @"\");
+                errorReason = $@"Input {path} {NO_TRAILING_CHAR} \";
                 return false;
             }
             else
@@ -38,7 +38,7 @@ namespace HabitatInstaller.Core.Class
         {
             if (string.IsNullOrEmpty(inputText))
             {
-                errorReason = string.Format("{0}", STRING_EMPTY);
+                errorReason = $"{STRING_EMPTY}";
                 return false;
             }
             else
@@ -52,17 +52,17 @@ namespace HabitatInstaller.Core.Class
         {
             if (string.IsNullOrEmpty(inputText))
             {
-                errorReason = string.Format("{0}", STRING_EMPTY);
+                errorReason = $"{STRING_EMPTY}";
                 return false;
             }
             else if (!inputText.EndsWith(character))
             {
-                errorReason = string.Format("{0} {1} {2} {3}", "Input", inputText, NO_TRAILING_CHAR, character);
+                errorReason = $"Input {inputText} {NO_TRAILING_CHAR} {character}";
                 return false;
             }
             else if (Directory.Exists(inputText))
             {
-                errorReason = string.Format("{0} {1}", inputText, PATH_ALREADY_EXISTS);
+                errorReason = $"{inputText} {PATH_ALREADY_EXISTS}";
                 return false;
             }
             else

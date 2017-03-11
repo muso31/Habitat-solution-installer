@@ -40,7 +40,7 @@ namespace HabitatInstaller.UI.Windows
 
         private async Task DownloadFile()
         {
-            _dlFilePath = _solution.TempDownloadDirectory + "Habitat.zip";
+            _dlFilePath = $"{_solution.TempDownloadDirectory}Habitat.zip";
 
             using (var client = new WebClient())
             {
@@ -91,7 +91,7 @@ namespace HabitatInstaller.UI.Windows
                     {
                         var dirName = new DirectoryInfo(_solution.SolutionInstallPath).Name;
                         //TODO: CHECK TEMP PATH DOESNT EXIST
-                        _tempPath = _solution.SolutionInstallPath.Replace(dirName, dirName + @"_temp");
+                        _tempPath = _solution.SolutionInstallPath.Replace(dirName, $"{dirName}_temp");
 
                         ZipFile.ExtractToDirectory(_dlFilePath, _tempPath);
                     }
@@ -108,7 +108,7 @@ namespace HabitatInstaller.UI.Windows
                         Thread.Sleep(4000);
                         //TODO: resolve ACCESS IS DENIED ERROR?
                         // Directory.SetAccessControl(_tempPath + "Habitat-master");
-                        Directory.Move(_tempPath + "Habitat-master", _solution.SolutionInstallPath);
+                        Directory.Move($"{_tempPath}Habitat-master", _solution.SolutionInstallPath);
                         Thread.Sleep(2000);
                         Directory.Delete(_tempPath, true);
 

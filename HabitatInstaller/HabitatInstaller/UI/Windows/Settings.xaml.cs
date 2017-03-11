@@ -11,7 +11,7 @@ namespace HabitatInstaller.UI.Windows
         public Settings()
         {
             InitializeComponent();
-            versionLabel.Content = string.Format("Version: {0}", Properties.Settings.Default.Version);
+            versionLabel.Content = $"Version: {Properties.Settings.Default.Version}";
 
             solutionUrl.Text = Properties.Settings.Default.SolutionDownloadUrl;
             if (string.IsNullOrEmpty(Properties.Settings.Default.TempDirectory))
