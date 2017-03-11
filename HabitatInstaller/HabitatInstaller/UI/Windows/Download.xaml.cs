@@ -12,7 +12,7 @@ using System.Threading;
 namespace HabitatInstaller.UI.Windows
 {
     /// <summary>
-    /// Interaction logic for Install.xaml
+    /// Interaction logic for Download.xaml
     /// </summary>
     public partial class DownloadWindow : Window
     {
