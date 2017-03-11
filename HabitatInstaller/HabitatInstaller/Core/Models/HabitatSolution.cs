@@ -1,6 +1,6 @@
 ﻿namespace HabitatInstaller.Core.Models
 {
-    public class HabitatSolution : ISolution
+    public class HabitatSolution : IHabitatSolution
     {
         public string SolutionDownloadUrl { get; set; }
         public string TempDownloadDirectory { get; set; }

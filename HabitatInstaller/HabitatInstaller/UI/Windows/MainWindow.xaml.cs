@@ -10,18 +10,21 @@ namespace HabitatInstaller.UI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly ISolutionRepository _solutionRepository;
-        private ISolution _solution;
+        private readonly IHabitatSolutionRepository _solutionRepository;
+        private IHabitatSolution _solution;
 
-        public MainWindow(ISolutionRepository solutionRepository, ISolution solution)
+        public MainWindow(IHabitatSolutionRepository solutionRepository, IHabitatSolution solution)
         {
             _solutionRepository = solutionRepository;
             _solution = solution;
         }
 
-        public MainWindow() : this(new SolutionRepository(), new HabitatSolution())
+        public MainWindow() : this(new HabitatSolutionRepository(), new HabitatSolution())
         {
             InitializeComponent();
+            // First time run assign temp path setting
+            if (string.IsNullOrEmpty(Properties.Settings.Default.TempDirectory))
+                Properties.Settings.Default.TempDirectory = System.IO.Path.GetTempPath();
 
             //TODO: SETUP MODEL BINDING
             solutionInstallPath.Text = Properties.Settings.Default.SolutionInstallPathDefault;

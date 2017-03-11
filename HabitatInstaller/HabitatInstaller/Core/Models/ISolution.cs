@@ -6,7 +6,6 @@
         string TempDownloadDirectory { get; set; }
         string SolutionInstallPath { get; set; }
         string InstanceRoot { get; set; }
-        string PublishUrl { get; set; }
         string Hostname { get; set; }
     }
 }

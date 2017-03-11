@@ -1,13 +1,13 @@
 ﻿using HabitatInstaller.Core.Models;
 using System;
-using System.Net;
-using System.Windows;
-using System.IO.Compression;
-using System.IO;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace HabitatInstaller.UI.Windows
 {
@@ -18,10 +18,10 @@ namespace HabitatInstaller.UI.Windows
     {
         private string _tempPath;
         private string _dlFilePath;
-        private ISolution _solution;
+        private IHabitatSolution _solution;
         private bool _errors = false;
 
-        public DownloadWindow(ISolution solution)
+        public DownloadWindow(IHabitatSolution solution)
         {
             _solution = solution;
             InitializeComponent();
@@ -119,14 +119,15 @@ namespace HabitatInstaller.UI.Windows
 
                         //update the z.Habitat.DevSettings.config file
                         var pathToDevSettingsFile = $@"{_solution.SolutionInstallPath}src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
-                        File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(@"C:\projects\Habitat\", _solution.SolutionInstallPath));
-                        File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace("dev.local", _solution.Hostname));
+                        File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(Properties.Settings.Default.SolutionInstallPathDefault, _solution.SolutionInstallPath));
+                        File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(Properties.Settings.Default.HostnameDefault, _solution.Hostname));
                         //update the gulp-config.js
                         var gulpFile = $"{_solution.SolutionInstallPath}gulp-config.js";
-                        File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(@"C:\\websites\\Habitat.dev.local", _solution.InstanceRoot));
+                        File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(Properties.Settings.Default.InstanceRootDefault, _solution.InstanceRoot));
                         //update the publishsettings.targets file
                         var publishSettingsFile = $"{_solution.SolutionInstallPath}publishsettings.targets";
-                        File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace("http://habitat.dev.local", _solution.PublishUrl));
+                        File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace(Properties.Settings.Default.PublishUrlDefault, _solution.PublishUrl));
+
                     }
                     catch (Exception ex)
                     {

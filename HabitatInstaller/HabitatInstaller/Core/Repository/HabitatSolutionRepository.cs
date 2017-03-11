@@ -1,12 +1,13 @@
 ﻿using HabitatInstaller.Core.Models;
 using HabitatInstaller.UI.Windows;
 using System.Windows;
+using System;
 
 namespace HabitatInstaller.Repository
 {
-    public class SolutionRepository : ISolutionRepository
+    public class HabitatSolutionRepository : IHabitatSolutionRepository
     {
-        public ISolution MapUserInput(ISolution solution)
+        public IHabitatSolution MapUserInput(IHabitatSolution solution)
         {
             var _form = Application.Current.Windows[0] as MainWindow;
 

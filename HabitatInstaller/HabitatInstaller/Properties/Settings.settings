@@ -9,7 +9,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SolutionInstallPathDefault" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">c:\Projects\Habitat\</Value>
+      <Value Profile="(Default)">C:\projects\Habitat\</Value>
     </Setting>
     <Setting Name="InstanceRootDefault" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\\websites\\Habitat.dev.local</Value>

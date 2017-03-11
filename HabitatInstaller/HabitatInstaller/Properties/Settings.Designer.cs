@@ -49,7 +49,7 @@ namespace HabitatInstaller.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("c:\\Projects\\Habitat\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\projects\\Habitat\\")]
         public string SolutionInstallPathDefault {
             get {
                 return ((string)(this["SolutionInstallPathDefault"]));

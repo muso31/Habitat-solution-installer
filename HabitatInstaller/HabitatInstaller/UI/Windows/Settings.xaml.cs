@@ -14,9 +14,6 @@ namespace HabitatInstaller.UI.Windows
             versionLabel.Content = $"Version: {Properties.Settings.Default.Version}";
 
             solutionUrl.Text = Properties.Settings.Default.SolutionDownloadUrl;
-            if (string.IsNullOrEmpty(Properties.Settings.Default.TempDirectory))
-                Properties.Settings.Default.TempDirectory = System.IO.Path.GetTempPath();
-
             tempDirectory.Text = Properties.Settings.Default.TempDirectory;
         }
 
