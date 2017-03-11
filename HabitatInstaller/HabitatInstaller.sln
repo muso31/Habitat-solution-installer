@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HabitatInstaller", "HabitatInstaller\HabitatInstaller.csproj", "{1DCAD29E-72E2-4709-8083-803616F7CFA8}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{FFF6D669-7CC0-4AEA-9219-574987D560D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{1DCAD29E-72E2-4709-8083-803616F7CFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DCAD29E-72E2-4709-8083-803616F7CFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DCAD29E-72E2-4709-8083-803616F7CFA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFF6D669-7CC0-4AEA-9219-574987D560D0}.Debug|Any CPU.ActiveCfg = Debug
-		{FFF6D669-7CC0-4AEA-9219-574987D560D0}.Debug|Any CPU.Build.0 = Debug
-		{FFF6D669-7CC0-4AEA-9219-574987D560D0}.Release|Any CPU.ActiveCfg = Release
-		{FFF6D669-7CC0-4AEA-9219-574987D560D0}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

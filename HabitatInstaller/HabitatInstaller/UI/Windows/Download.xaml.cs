@@ -30,7 +30,6 @@ namespace HabitatInstaller.UI.Windows
         private async Task Start()
         {
             await DownloadFile();
-
             await ExtractFiles();
 
             if (!_errors)
@@ -119,14 +118,14 @@ namespace HabitatInstaller.UI.Windows
                         });
 
                         //update the z.Habitat.DevSettings.config file
-                        string pathToDevSettingsFile = _solution.SolutionInstallPath + @"src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
+                        var pathToDevSettingsFile = $@"{_solution.SolutionInstallPath}src\Project\Habitat\code\App_Config\Include\Project\z.Habitat.DevSettings.config";
                         File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace(@"C:\projects\Habitat\", _solution.SolutionInstallPath));
                         File.WriteAllText(pathToDevSettingsFile, File.ReadAllText(pathToDevSettingsFile).Replace("dev.local", _solution.Hostname));
                         //update the gulp-config.js
-                        var gulpFile = _solution.SolutionInstallPath + "gulp-config.js";
+                        var gulpFile = $"{_solution.SolutionInstallPath}gulp-config.js";
                         File.WriteAllText(gulpFile, File.ReadAllText(gulpFile).Replace(@"C:\\websites\\Habitat.dev.local", _solution.InstanceRoot));
                         //update the publishsettings.targets file
-                        var publishSettingsFile = _solution.SolutionInstallPath + "publishsettings.targets";
+                        var publishSettingsFile = $"{_solution.SolutionInstallPath}publishsettings.targets";
                         File.WriteAllText(publishSettingsFile, File.ReadAllText(publishSettingsFile).Replace("http://habitat.dev.local", _solution.PublishUrl));
                     }
                     catch (Exception ex)
@@ -179,7 +178,7 @@ namespace HabitatInstaller.UI.Windows
             {
                 this.Close();
             });
-            MessageBox.Show("Habitat solution installed to " + _solution.SolutionInstallPath, "Complete", MessageBoxButton.OK, MessageBoxImage.None);
+            MessageBox.Show($"Habitat solution installed to {_solution.SolutionInstallPath}", "Complete", MessageBoxButton.OK, MessageBoxImage.None);
         }
 
         private void OutputErrorCloseWindow(Exception ex)

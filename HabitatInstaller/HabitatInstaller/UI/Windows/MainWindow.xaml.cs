@@ -11,7 +11,7 @@ namespace HabitatInstaller.UI.Windows
     public partial class MainWindow : Window
     {
         private readonly ISolutionRepository _solutionRepository;
-        public ISolution _solution;
+        private ISolution _solution;
 
         public MainWindow(ISolutionRepository solutionRepository, ISolution solution)
         {
@@ -64,7 +64,7 @@ namespace HabitatInstaller.UI.Windows
                 //TODO: SETUP DI
                 _solution = _solutionRepository.MapUserInput(_solution);
 
-                var confirmation = string.Format("Install Habitat to: {0}?", _solution.SolutionInstallPath);
+                var confirmation = $"Install Habitat to: {_solution.SolutionInstallPath}?";
                 var result = MessageBox.Show(confirmation, "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result.Equals(MessageBoxResult.Yes))
